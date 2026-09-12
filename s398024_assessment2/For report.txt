@@ -1,0 +1,110 @@
+The terminal log confirms that your Member 1 pipeline executed to completion:
+
+* Both output files were created directly on disk: **`merged_fifa2026_squad_data.csv`** (4.7 KB) and **`task1_conversion_dist.png`** (96 KB).
+* The script successfully ran through all weekly techniques:
+* **Week 5 Data Wrangling:** Loaded 50 squad rows and 1,080 player rows, merged them on `Squad`, and output 48 cleaned team records.
+
+
+* **Week 2 Descriptive Statistics:** Summarized 32 Knockout teams vs. 16 Group Eliminated teams and saved the distribution plot (`task1_conversion_dist.png`).
+
+
+* **Week 3 Confidence Intervals:** Generated non-overlapping 95% CIs: **$[0.1086, 0.1420]$** (Knockout) vs. **$[0.0471, 0.0892]$** (Eliminated).
+
+
+* **Week 4 Two-Sample Welch's $t$-test:** Yielded $t^* = 4.4572$ with $p = 0.000041 < 0.05$, rejecting $H_0$.
+
+
+
+
+
+---
+
+### Official Deliverable Write-Up: Member 1 Report Section
+
+You can paste the text below directly into your group report for Member 1:
+
+---
+
+### Task 1: Goal Conversion Efficiency ($\text{Gls}/\text{Sh}$) Across Tournament Stages
+
+#### 1. Analytic Question Formulation
+
+* **Investigation Goal:** Evaluate whether qualification for the knockout stage was driven by finishing precision rather than sheer shot volume.
+* **Analytic Question:** Did national teams that advanced to the Knockout Stage achieve a significantly higher Goal Conversion Efficiency ($\text{Gls}/\text{Sh}$) than teams eliminated in the Group Stage during the FIFA World Cup 2026?
+
+#### 2. Data Wrangling & Preparation
+
+* **Datasets Merged:** `squad_shooting.csv` and `player_shooting.csv` (FBref).
+
+
+* **Wrangling Operations:**
+* Cleaned national squad identifiers using regex string stripping (removing country code prefixes).
+* Converted match counts (`90s`), goals (`Gls`), shots (`Sh`), and conversion efficiency (`G/Sh`) into numeric data types.
+* Aggregated player-level demographic indicators (`Avg_Squad_Age`, `Total_Players_Used`) and executed a left merge with squad statistics on key `Squad`.
+
+
+* Filtered the dataset to $N = 48$ nations and exported the final consolidated file: `merged_fifa2026_squad_data.csv`.
+
+
+
+
+* **Grouping Criterion:**
+* **Group Stage Eliminated ($n_1 = 16$):** Teams that concluded their tournament at 3 group matches ($\text{90s} \le 3.0$).
+* **Knockout Stage Qualified ($n_2 = 32$):** Teams that advanced to the Round of 32 and beyond ($\text{90s} > 3.0$).
+
+
+
+#### 3. Descriptive Statistics & Visualization
+
+* **Descriptive Summary Table:**
+
+| Metric | Group Stage Eliminated ($n_1 = 16$) | Knockout Stage Qualified ($n_2 = 32$) |
+| --- | --- | --- |
+| **Mean ($\bar{x}$)** | **0.0681** (6.81%) | **0.1253** (12.53%) |
+| **Standard Deviation ($s$)** | **0.0395** | **0.0463** |
+| **Median (Q2)** | **0.0600** (6.00%) | **0.1300** (13.00%) |
+| **IQR (Q3 - Q1)** | **0.0725** ($0.0375 - 0.1100$) | **0.0525** ($0.0975 - 0.1500$) |
+| **Min - Max** | **0.0000 - 0.1300** | **0.0400 - 0.2400** |
+
+* **Visual Output:** A dual-distribution histogram saved to `task1_conversion_dist.png` visually highlights that the knockout group distribution is shifted distinctly to the right toward higher efficiency values.
+
+#### 4. Inferential Statistics (Confidence Intervals)
+
+* **Sampling Distribution Assumptions:** Because the true population variances are unknown and $n_1 = 16 < 30$, Student's $t^*$ distribution is applied ($df_1 = 15$, $df_2 = 31$).
+
+
+* **Knockout Stage 95% CI:**
+
+$$\bar{x}_2 \pm t^*_{0.025, 31} \times \frac{s_2}{\sqrt{n_2}} = 0.1253 \pm 2.040 \times 0.00818 \implies \mathbf{[0.1086, \, 0.1420]}$$
+
+
+* **Group Stage Eliminated 95% CI:**
+
+$$\bar{x}_1 \pm t^*_{0.025, 15} \times \frac{s_1}{\sqrt{n_1}} = 0.0681 \pm 2.131 \times 0.00988 \implies \mathbf{[0.0471, \, 0.0892]}$$
+
+
+* **Interpretation:** The 95% confidence intervals do not overlap, providing clear evidence of a performance gap between the two cohorts.
+
+#### 5. Inferential Statistics (Two-Sample Welch's $t$-Test)
+
+* **Hypotheses:**
+* $H_0: \mu_{\text{Knockout}} = \mu_{\text{Eliminated}}$ (No difference in mean conversion efficiency).
+
+
+* $H_a: \mu_{\text{Knockout}} > \mu_{\text{Eliminated}}$ (Knockout teams have higher mean conversion efficiency).
+
+
+
+
+* **Test Parameters:** Welch's Two-Sample $t$-test (`equal_var=False`, `alternative='greater'`).
+
+
+* **Results:**
+* **$t$-statistic ($t^*$):** **$4.4572$**
+
+* **Degrees of Freedom ($df$):** $\approx 35.1$
+* **$p$-value:** **$0.000041$ ($p < 0.0001$)**
+
+
+
+* **Conclusion:** Because $p < 0.05$, we reject the null hypothesis $H_0$. Knockout-qualified teams converted shots into goals at almost double the efficiency of eliminated teams ($12.53\%$ vs. $6.81\%$), a difference that is statistically significant.
