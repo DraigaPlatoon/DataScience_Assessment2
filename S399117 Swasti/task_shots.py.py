@@ -4,7 +4,7 @@ import pandas as pd
 import scipy.stats as st
 
 # 1. Dataset of all 48 qualified nations
-df = pd.read_csv("datasheet.txt")
+df = pd.read_csv("./datasheet.csv")
 
 # 2. Split cohorts
 uefa = df[df["Confederation"] == "UEFA"]["Shots_per_90"]
