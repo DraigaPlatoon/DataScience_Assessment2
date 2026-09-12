@@ -3,7 +3,7 @@ import pandas as pd
 import scipy.stats as st
 
 # Load dataset
-df = pd.read_csv("datasheet.txt")
+df = pd.read_csv("./datasheet.txt")
 
 # Generate Q-Q plot against a normal distribution
 plt.figure(figsize=(7, 5))
