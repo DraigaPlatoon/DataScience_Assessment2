@@ -3,7 +3,7 @@ import pandas as pd
 import scipy.stats as st
 
 # Load dataset
-df = pd.read_csv("datasheet.txt")
+df = pd.read_csv("./datasheet.csv")
 uefa = df[df["Confederation"] == "UEFA"]["Shots_per_90"]
 non_uefa = df[df["Confederation"] == "Non-UEFA"]["Shots_per_90"]
 
