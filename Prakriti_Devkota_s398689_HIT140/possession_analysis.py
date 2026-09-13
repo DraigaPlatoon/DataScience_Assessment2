@@ -9,7 +9,7 @@ print("Files in this folder:", os.listdir())
 print("-" * 60)
 
 # ============================================
-# 1. Load the data (using CSV - recommended)
+# 1. Load the data 
 # ============================================
 try:
     df = pd.read_csv("wc2026_attacking.csv", encoding="latin1")
@@ -75,7 +75,7 @@ print(f"  Std Dev: {low.std():.2f}")
 print(f"  Min    : {low.min()}")
 print(f"  Max    : {low.max()}")
 
-# ============================================
+# ===========================================
 # 5. Confidence Interval (High Possession)
 # ============================================
 print("\n" + "="*60)
@@ -136,6 +136,7 @@ import seaborn as sns
 sns.set_style("whitegrid")
 
 # Graph 1: Boxplot with points
+
 plt.figure(figsize=(10, 6))
 sns.boxplot(data=df, x="Possession_Group", y="Attempts_On_Target", 
             hue="Possession_Group", palette="Set2", legend=False, width=0.5)
@@ -150,6 +151,7 @@ plt.close()
 print("✅ Graph 1 saved: 01_boxplot.png")
 
 # Graph 2: Bar chart
+
 plt.figure(figsize=(8, 6))
 means = df.groupby("Possession_Group")["Attempts_On_Target"].mean().reset_index()
 ax = sns.barplot(data=means, x="Possession_Group", y="Attempts_On_Target",
@@ -169,6 +171,7 @@ plt.close()
 print("✅ Graph 2 saved: 02_barchart.png")
 
 # Graph 3: Scatter plot
+
 plt.figure(figsize=(10, 6))
 sns.scatterplot(data=df, x="Possession_Control_%", y="Attempts_On_Target",
                 hue="Possession_Group", palette="Set2", s=110, edgecolor="black")
